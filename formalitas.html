@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Berbagi Kode | IkyApi'S</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #0f1117;
+            --bg-card: #11131d;
+            --bg-gradient: linear-gradient(135deg, #1a1b2e 0%, #0f1117 100%);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b7d6;
+            --text-muted: #6b7299;
+            --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.3);
+            --accent-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
+            --glow: 0 0 20px var(--accent-glow);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius: 20px;
+            --radius-sm: 12px;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #ffffff 100%);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --accent: #4f46e5;
+            --accent-glow: rgba(79, 70, 229, 0.2);
+            --warning: #d97706;
+            --danger: #dc2626;
+            --border: rgba(0, 0, 0, 0.08);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background 3D Modern */
+        #bg3d-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            opacity: 0.7;
+        }
+
+        .grid-bg {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 40s linear infinite;
+            opacity: 0.15;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        .floating-shape {
+            position: absolute;
+            border-radius: 20px;
+            background: var(--accent-gradient);
+            filter: blur(40px);
+            opacity: 0.1;
+            animation: floatShape 20s infinite ease-in-out;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            right: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 400px;
+            height: 400px;
+            bottom: 10%;
+            left: 10%;
+            animation-delay: 5s;
+        }
+
+        .shape-3 {
+            width: 200px;
+            height: 200px;
+            top: 50%;
+            right: 20%;
+            animation-delay: 10s;
+        }
+
+        @keyframes floatShape {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navbar */
+        .navbar {
+            padding: 24px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 40px;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: var(--transition);
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link.active {
+            color: var(--accent);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent-gradient);
+            border-radius: 2px;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            width: 50px;
+            height: 50px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-primary);
+            box-shadow: var(--shadow);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: var(--accent-gradient);
+            padding: 80px 0;
+            text-align: center;
+            border-radius: var(--radius);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .page-title h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: white;
+            line-height: 1.1;
+        }
+
+        .page-title p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* User Info */
+        .user-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 24px;
+            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .user-details {
+            text-align: left;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .user-email {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Filter Controls */
+        .filter-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 24px;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-controls::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-gradient);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--accent-gradient);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-input {
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            min-width: 300px;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: var(--glow);
+        }
+
+        .search-btn {
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+        }
+
+        .search-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px 0 60px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 40px;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 2px dashed var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .empty-state::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-gradient);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            color: var(--accent);
+            margin-bottom: 24px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Code Cards Grid */
+        .code-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .code-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .code-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .code-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent);
+        }
+
+        .code-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-header {
+            padding: 24px;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-type {
+            display: inline-block;
+            padding: 6px 16px;
+            background: var(--accent-gradient);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .action-btn.delete-btn:hover {
+            background: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .card-content {
+            padding: 24px;
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: 1rem;
+            line-height: 1.6;
+            padding-left: 16px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .code-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .author-avatar {
+            width: 36px;
+            height: 36px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .code-preview {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .code-preview pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: var(--text-primary);
+        }
+
+        .code-language {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-gradient);
+            color: white;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .card-footer {
+            padding: 20px 24px;
+            background: rgba(0, 0, 0, 0.1);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-date {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-btn {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 20px var(--accent-glow);
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px var(--accent-glow);
+        }
+
+        /* Add Button */
+        .add-button {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 70px;
+            height: 70px;
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg), 0 8px 20px var(--accent-glow);
+            transition: var(--transition);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .add-button:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: var(--shadow-lg), 0 12px 30px var(--accent-glow);
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-gradient);
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .modal-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+        }
+
+        .close-modal:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.875rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: var(--glow);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+            transition: var(--transition);
+            resize: vertical;
+            min-height: 200px;
+            line-height: 1.4;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: var(--glow);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: var(--glow);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px 24px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: 0 8px 20px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 120px;
+            right: 40px;
+            background: var(--accent-gradient);
+            color: white;
+            padding: 20px 30px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1002;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: var(--transition);
+            max-width: 350px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Logout Button */
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn:hover {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .code-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+            
+            .filter-controls {
+                flex-direction: column;
+                gap: 20px;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .search-input {
+                min-width: auto;
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 16px 0;
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+            
+            .nav-links {
+                gap: 1.5rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero-section {
+                padding: 60px 16px;
+                margin: -16px -16px 2rem;
+                border-radius: 0;
+            }
+            
+            .page-title h1 {
+                font-size: 2.25rem;
+            }
+            
+            .page-title p {
+                font-size: 1.125rem;
+            }
+            
+            .code-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                padding: 30px 20px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .add-button {
+                bottom: 20px;
+                right: 20px;
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+            
+            .toast {
+                right: 20px;
+                left: 20px;
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title h1 {
+                font-size: 1.75rem;
+            }
+            
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .card-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .user-details {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background 3D -->
+    <div id="bg3d-container">
+        <div class="grid-bg"></div>
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar container">
+        <a href="/" class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-code"></i>
+            </div>
+            IkyApi'S
+        </a>
+        
+        <div class="nav-links">
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/api" class="nav-link">Api</a>
+            <a href="/kuis" class="nav-link">Games</a>
+            <a href="/donate" class="nav-link">Donasi</a>
+            <a href="/forum" class="nav-link active">Forum</a>
+            <a href="/about" class="nav-link">Tentang</a>
+            <button class="logout-btn" onclick="logout()" aria-label="Keluar">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Keluar</span>
+            </button>
+        </div>
+        
+        <div class="theme-toggle" onclick="toggleTheme()">
+            <i class="fas fa-moon" id="theme-icon"></i>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-share-alt"></i>
+                <span>Komunitas Developer</span>
+            </div>
+            <div class="page-title">
+                <h1>Platform Berbagi Kode</h1>
+                <p>Bagikan potongan kode, fungsi, dan script Anda. Semua pengguna dapat melihat kode yang dibagikan.</p>
+                <div class="user-info" id="userInfo">
+                    <!-- User info akan dimasukkan di sini -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content container">
+        <!-- Filter Controls -->
+        <div class="filter-controls" id="filterControls">
+            <div class="filter-group">
+                <button class="filter-btn active" onclick="filterCodes('all')">Semua Kode</button>
+                <button class="filter-btn" onclick="filterCodes('my')">Kode Saya</button>
+                <select class="filter-btn" id="languageFilter" onchange="filterByLanguage(this.value)" style="background: rgba(255, 255, 255, 0.05); color: var(--text-primary);">
+                    <option value="all">Semua Bahasa</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="php">PHP</option>
+                    <option value="java">Java</option>
+                    <option value="other">Lainnya</option>
+                </select>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" class="search-input" placeholder="Cari kode...">
+                <button class="search-btn" onclick="searchCodes()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Code Cards Grid -->
+        <div class="code-grid" id="codeGrid">
+            <!-- Kartu kode akan ditambahkan secara dinamis di sini -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState">
+            <div class="empty-icon">
+                <i class="fas fa-code"></i>
+            </div>
+            <h3>Belum Ada Kode yang Dibagikan</h3>
+            <p>Mulai bagikan potongan kode, fungsi, atau script Anda dengan menekan tombol + di bawah.</p>
+            <button class="copy-btn" onclick="openAddModal()" style="max-width: 250px; margin: 0 auto;">
+                <i class="fas fa-plus"></i> Tambah Kode Pertama
+            </button>
+        </div>
+    </main>
+
+    <!-- Add Button -->
+    <button class="add-button" onclick="openAddModal()">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- Add Code Modal -->
+    <div class="modal" id="addModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <i class="fas fa-code"></i> Bagikan Kode
+                </h2>
+                <button class="close-modal" onclick="closeAddModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="codeForm">
+                <div class="form-group">
+                    <label class="form-label" for="codeTitle">Judul *</label>
+                    <input type="text" id="codeTitle" class="form-input" placeholder="Masukkan judul kode (contoh: 'Fungsi Async Fetch')" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="codeType">Tipe *</label>
+                    <select id="codeType" class="form-select" required>
+                        <option value="">Pilih tipe</option>
+                        <option value="function">Fungsi</option>
+                        <option value="snippet">Potongan Kode</option>
+                        <option value="script">Script</option>
+                        <option value="module">Modul</option>
+                        <option value="utility">Utilitas</option>
+                        <option value="other">Lainnya</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="codeLanguage">Bahasa *</label>
+                    <select id="codeLanguage" class="form-select" required>
+                        <option value="javascript">JavaScript</option>
+                        <option value="python">Python</option>
+                        <option value="html">HTML</option>
+                        <option value="css">CSS</option>
+                        <option value="php">PHP</option>
+                        <option value="java">Java</option>
+                        <option value="cpp">C++</option>
+                        <option value="csharp">C#</option>
+                        <option value="go">Go</option>
+                        <option value="rust">Rust</option>
+                        <option value="other">Lainnya</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="codeDescription">Deskripsi</label>
+                    <textarea id="codeDescription" class="form-input" placeholder="Jelaskan apa yang dilakukan kode ini..." rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="codeContent">Isi Kode *</label>
+                    <textarea id="codeContent" class="form-textarea" placeholder="Tempel kode Anda di sini..." required></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddModal()">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Bagikan Kode
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <!-- Script tetap sama seperti sebelumnya -->
+    <script>
+        // Theme Management - UPDATED
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (newTheme === 'dark') {
+                themeIcon.className = 'fas fa-moon';
+            } else {
+                themeIcon.className = 'fas fa-sun';
+            }
+            
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (systemPrefersDark ? 'dark' : 'dark');
+            
+            document.documentElement.setAttribute('data-theme', theme);
+            
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (theme === 'dark') {
+                themeIcon.className = 'fas fa-moon';
+            } else {
+                themeIcon.className = 'fas fa-sun';
+            }
+        }
+
+        // Check if user is logged in
+        function checkLogin() {
+            const currentUser = localStorage.getItem('current_user');
+            if (!currentUser) {
+                // Redirect to login page if not logged in
+                window.location.href = '/login';
+                return null;
+            }
+            return JSON.parse(currentUser);
+        }
+
+        // Display user info
+        function displayUserInfo(user) {
+            const userInfo = document.getElementById('userInfo');
+            if (userInfo && user) {
+                userInfo.innerHTML = `
+                    <div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>
+                    <div class="user-details">
+                        <div class="user-name">${user.username}</div>
+                        <div class="user-email">${user.email || user.phone || 'Tidak ada info kontak'}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('current_user');
+            showToast('Berhasil keluar!');
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 1000);
+        }
+
+        // Code Storage - SEMUA KODE DISIMPAN DALAM SATU TEMPAT
+        let allCodes = [];
+
+        // Load all codes from localStorage
+        function loadAllCodes() {
+            const savedCodes = localStorage.getItem('allSharedCodes');
+            if (savedCodes) {
+                allCodes = JSON.parse(savedCodes);
+            } else {
+                allCodes = [];
+            }
+            renderAllCodes();
+        }
+
+        // Save all codes to localStorage
+        function saveAllCodes() {
+            localStorage.setItem('allSharedCodes', JSON.stringify(allCodes));
+        }
+
+        // Render all codes (semua pengguna bisa melihat)
+        function renderAllCodes(codesToRender = allCodes) {
+            const codeGrid = document.getElementById('codeGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (!codeGrid || !emptyState) return;
+            
+            if (codesToRender.length === 0) {
+                emptyState.style.display = 'block';
+                codeGrid.innerHTML = '';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            codeGrid.innerHTML = '';
+            
+            // Sort codes by date (newest first)
+            const sortedCodes = [...codesToRender].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            const currentUser = JSON.parse(localStorage.getItem('current_user') || '{}');
+            
+            sortedCodes.forEach((code, index) => {
+                const isMyCode = currentUser.username === code.author;
+                const card = document.createElement('div');
+                card.className = 'code-card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="card-type">${escapeHtml(code.type)}</span>
+                            ${escapeHtml(code.title)}
+                        </div>
+                        <div class="card-actions">
+                            ${isMyCode ? `
+                                <button class="action-btn" onclick="editCode('${code.id}')" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete-btn" onclick="deleteCode('${code.id}')" title="Hapus">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="code-author">
+                            <div class="author-avatar">${code.author.charAt(0).toUpperCase()}</div>
+                            <span>Dibagikan oleh ${escapeHtml(code.author)}</span>
+                        </div>
+                        ${code.description ? `<p class="card-description">${escapeHtml(code.description)}</p>` : ''}
+                        <div class="code-preview">
+                            <div class="code-language">${escapeHtml(code.language)}</div>
+                            <pre>${escapeHtml(code.content.substring(0, 300))}${code.content.length > 300 ? '...' : ''}</pre>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-date">
+                            <i class="far fa-calendar"></i> ${formatDate(code.date)}
+                        </div>
+                        <button class="copy-btn" onclick="copyCode('${code.id}')">
+                            <i class="fas fa-copy"></i> Salin Kode
+                        </button>
+                    </div>
+                `;
+                codeGrid.appendChild(card);
+            });
+        }
+
+        // Add new code (semua orang bisa melihat)
+        function addCode(codeData) {
+            const user = checkLogin();
+            if (!user) return;
+            
+            const newCode = {
+                ...codeData,
+                id: 'code_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                date: new Date().toISOString(),
+                author: user.username,
+                authorId: user.id || user.username
+            };
+            
+            allCodes.push(newCode);
+            saveAllCodes();
+            renderAllCodes();
+            showToast('Kode berhasil dibagikan!');
+        }
+
+        // Edit code (hanya pemilik yang bisa edit)
+        function editCode(codeId) {
+            const codeIndex = allCodes.findIndex(code => code.id === codeId);
+            if (codeIndex === -1) return;
+            
+            const code = allCodes[codeIndex];
+            const currentUser = JSON.parse(localStorage.getItem('current_user') || '{}');
+            
+            // Cek apakah pengguna adalah pemilik kode
+            if (code.author !== currentUser.username) {
+                showToast('Anda hanya dapat mengedit kode Anda sendiri!', 'error');
+                return;
+            }
+            
+            // Populate form
+            document.getElementById('codeTitle').value = code.title;
+            document.getElementById('codeType').value = code.type;
+            document.getElementById('codeLanguage').value = code.language;
+            document.getElementById('codeDescription').value = code.description || '';
+            document.getElementById('codeContent').value = code.content;
+            
+            // Store editing ID
+            document.getElementById('codeForm').dataset.editingId = codeId;
+            
+            openAddModal();
+        }
+
+        // Delete code (hanya pemilik yang bisa hapus)
+        function deleteCode(codeId) {
+            const codeIndex = allCodes.findIndex(code => code.id === codeId);
+            if (codeIndex === -1) return;
+            
+            const code = allCodes[codeIndex];
+            const currentUser = JSON.parse(localStorage.getItem('current_user') || '{}');
+            
+            // Cek apakah pengguna adalah pemilik kode
+            if (code.author !== currentUser.username) {
+                showToast('Anda hanya dapat menghapus kode Anda sendiri!', 'error');
+                return;
+            }
+            
+            if (confirm('Apakah Anda yakin ingin menghapus kode ini?')) {
+                allCodes.splice(codeIndex, 1);
+                saveAllCodes();
+                renderAllCodes();
+                showToast('Kode berhasil dihapus!');
+            }
+        }
+
+        // Copy code to clipboard
+        function copyCode(codeId) {
+            const code = allCodes.find(c => c.id === codeId);
+            if (!code) return;
+            
+            navigator.clipboard.writeText(code.content)
+                .then(() => {
+                    showToast('Kode disalin ke clipboard!');
+                })
+                .catch(err => {
+                    console.error('Gagal menyalin kode: ', err);
+                    showToast('Gagal menyalin kode', 'error');
+                });
+        }
+
+        // Filter codes
+        function filterCodes(filterType) {
+            const currentUser = JSON.parse(localStorage.getItem('current_user') || '{}');
+            let filteredCodes = allCodes;
+            
+            if (filterType === 'my') {
+                filteredCodes = allCodes.filter(code => code.author === currentUser.username);
+            }
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderAllCodes(filteredCodes);
+        }
+
+        // Filter by language
+        function filterByLanguage(language) {
+            if (language === 'all') {
+                renderAllCodes(allCodes);
+                return;
+            }
+            
+            const filteredCodes = allCodes.filter(code => code.language === language);
+            renderAllCodes(filteredCodes);
+        }
+
+        // Search codes
+        function searchCodes() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (!searchTerm) {
+                renderAllCodes(allCodes);
+                return;
+            }
+            
+            const filteredCodes = allCodes.filter(code => 
+                code.title.toLowerCase().includes(searchTerm) ||
+                code.description.toLowerCase().includes(searchTerm) ||
+                code.content.toLowerCase().includes(searchTerm) ||
+                code.author.toLowerCase().includes(searchTerm)
+            );
+            
+            renderAllCodes(filteredCodes);
+        }
+
+        // Modal Functions
+        function openAddModal() {
+            const modal = document.getElementById('addModal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeAddModal() {
+            const modal = document.getElementById('addModal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                const form = document.getElementById('codeForm');
+                if (form) {
+                    form.reset();
+                    delete form.dataset.editingId;
+                }
+            }
+        }
+
+        // Form Submission
+        function initForm() {
+            const form = document.getElementById('codeForm');
+            if (!form) return;
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const editingId = this.dataset.editingId;
+                const codeData = {
+                    title: document.getElementById('codeTitle').value.trim(),
+                    type: document.getElementById('codeType').value,
+                    language: document.getElementById('codeLanguage').value,
+                    description: document.getElementById('codeDescription').value.trim(),
+                    content: document.getElementById('codeContent').value
+                };
+                
+                // Validation
+                if (!codeData.title || !codeData.type || !codeData.language || !codeData.content) {
+                    showToast('Harap isi semua field yang diperlukan', 'error');
+                    return;
+                }
+                
+                if (editingId) {
+                    // Update existing code
+                    const codeIndex = allCodes.findIndex(code => code.id === editingId);
+                    if (codeIndex !== -1) {
+                        allCodes[codeIndex] = {
+                            ...allCodes[codeIndex], // Keep original metadata
+                            ...codeData, // Update data
+                            date: allCodes[codeIndex].date // Keep original date
+                        };
+                        showToast('Kode berhasil diperbarui!');
+                    }
+                } else {
+                    // Add new code
+                    addCode(codeData);
+                }
+                
+                saveAllCodes();
+                renderAllCodes();
+                closeAddModal();
+            });
+        }
+
+        // Toast Notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            if (!toast || !toastMessage) return;
+            
+            toast.style.background = type === 'success' ? 'var(--success)' : 'var(--danger)';
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Helper Functions
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatDate(dateString) {
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('id-ID', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } catch (e) {
+                return 'Tanggal tidak diketahui';
+            }
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('addModal');
+                if (modal && modal.classList.contains('active')) {
+                    closeAddModal();
+                }
+            }
+        });
+
+        // Close modal on overlay click
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('addModal');
+            if (modal && e.target === modal) {
+                closeAddModal();
+            }
+        });
+
+        // Search on enter key
+        document.getElementById('searchInput')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchCodes();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTheme();
+            
+            // Check login status
+            const user = checkLogin();
+            if (user) {
+                displayUserInfo(user);
+                loadAllCodes();
+                initForm();
+                
+                // Add some sample codes if empty (for demo purposes)
+                if (allCodes.length === 0) {
+                    // Sample codes
+                    const sampleCodes = [
+                        {
+                            id: 'sample_1',
+                            title: 'Fungsi Async Fetch',
+                            type: 'function',
+                            language: 'javascript',
+                            description: 'Fungsi async yang dapat digunakan kembali untuk membuat permintaan HTTP',
+                            content: 'async function fetchData(url, options = {}) {\n  try {\n    const response = await fetch(url, options);\n    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);\n    return await response.json();\n  } catch (error) {\n    console.error("Fetch error:", error);\n    throw error;\n  }\n}',
+                            author: 'demo_user',
+                            date: new Date(Date.now() - 86400000).toISOString() // 1 day ago
+                        },
+                        {
+                            id: 'sample_2',
+                            title: 'Generator Fibonacci Python',
+                            type: 'function',
+                            language: 'python',
+                            description: 'Hasilkan urutan Fibonacci hingga n',
+                            content: 'def fibonacci(n):\n    """Generate Fibonacci sequence up to n"""\n    a, b = 0, 1\n    result = []\n    while a <= n:\n        result.append(a)\n        a, b = b, a + b\n    return result',
+                            author: 'python_dev',
+                            date: new Date(Date.now() - 172800000).toISOString() // 2 days ago
+                        }
+                    ];
+                    
+                    allCodes.push(...sampleCodes);
+                    saveAllCodes();
+                    renderAllCodes();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
